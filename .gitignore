@@ -1,0 +1,4 @@
+# 本仓库只跟踪编译器工程 Pile_SysY/，其余课程参考资料（课件、PDF、示例代码等）不入库
+/*
+!/.gitignore
+!/Pile_SysY/
