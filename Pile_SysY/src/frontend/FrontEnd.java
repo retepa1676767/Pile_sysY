@@ -1,22 +1,26 @@
 package frontend;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import error.*;
+import error.FrontError;
+import frontend.lexer.Lexer;
+import frontend.lexer.Token;
 import utils.IOhandler;
 
 public class FrontEnd{
     private static Lexer lexer= new Lexer();
-    public  static void lex() throws IOException{
-        lexer.run();
+    public  static ArrayList<Token> lex() throws IOException{
+        return lexer.run();
     }
 public static void writeErrorList() throws IOException{
-    ArrayList<String> l=lexer.getErrorList();
       StringBuilder content = new StringBuilder();
-    for(String str:l){
-        content.append(str + "\n");
+      ArrayList<FrontError> l = ErrorRecorder.getErrorList();
+    for(FrontError fe: l){
+        content.append(fe.toString() + "\n");
     };
     IOhandler.write(IOhandler.ERROR_FILE,content.toString());
 }
+
 public static void writeTokenList() throws IOException{
     ArrayList<Token> tl = lexer.getTokenList();
     StringBuilder content = new StringBuilder();

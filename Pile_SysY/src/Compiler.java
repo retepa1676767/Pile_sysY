@@ -3,6 +3,7 @@ import frontend.*;
 
 public class Compiler{
 public static void main(String[] args) {
+      //initiation
         try{
                IOhandler.init(); 
         }
@@ -15,10 +16,13 @@ public static void main(String[] args) {
       }
               System.exit(0);  
         }
+
+       
+        //process
         try {
        FrontEnd.lex();
         FrontEnd.writeTokenList();
-       FrontEnd.writeErrorList();
+        FrontEnd.writeErrorList();
 }
 catch(Throwable e){
         e.printStackTrace();

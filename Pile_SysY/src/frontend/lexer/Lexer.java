@@ -1,8 +1,9 @@
-package frontend;
+package frontend.lexer;
 
 import java.io.IOException;
 import java.util.HashSet;
-import frontend.TokenType;
+
+import error.ErrorRecorder;
 import error.ErrorType;
 import error.FrontError;
 
@@ -21,7 +22,7 @@ public class Lexer{
     private int readCnt;// incremented by every advance(); used to detect a non-consuming addToken()
     //private HashSet<String> reserveWords;// reserved word table
     private ArrayList<Token> tokenList;
-    private ArrayList<String> errorList;
+    //private ArrayList<String> errorList;
     private HashSet<Character> SymbolSet1;
     private HashSet<Character> SymbolSet2;
     public Lexer(){
@@ -29,7 +30,7 @@ public class Lexer{
         this.lineNum = 1;
        //this.reserveWords = new HashSet<String>();// reserved word table
         this.tokenList = new ArrayList<Token>();
-        this.errorList = new ArrayList<>();
+       
         initSymList();
     }
     private void initSymList(){
@@ -41,9 +42,7 @@ public class Lexer{
         for(char b:arr2)SymbolSet2.add(b);
 
     }
-    public ArrayList<String> getErrorList(){
-        return errorList;
-    }
+    
     
 
     public ArrayList<Token> getTokenList(){
@@ -112,7 +111,7 @@ public class Lexer{
                 advance();
                  if(curChar != '&'){
                     IOhandler.unread(curChar);
-                    errorList.add(new FrontError(ErrorType.a,lineNum).toString());
+                    ErrorRecorder.record(new FrontError(ErrorType.a,lineNum));
                 }
                 name.append("&");
                 type = TokenType.AND;
@@ -122,7 +121,7 @@ public class Lexer{
                 advance();
                  if(curChar != '|'){
                       IOhandler.unread(curChar);
-                      errorList.add(new FrontError(ErrorType.a,lineNum).toString());
+                      ErrorRecorder.record(new FrontError(ErrorType.a,lineNum));
                 }
                 name.append("|");
                type = TokenType.OR;
@@ -388,18 +387,19 @@ advance();
         }
          return curChar == '\n';
     }
-    public void run() throws IOException{
+
+    public ArrayList<Token> run() throws IOException{
         advance();
         while(curChar!=-1){
             handleSpace();
             if(isNewLine()){
                 lineNum++;
                 advance();
-                
                 continue;
             }
             addToken();
         }
+        return this.tokenList;
     }
 
 
